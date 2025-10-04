@@ -1,5 +1,5 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import {type ClassValue, clsx} from 'clsx';
+import {twMerge} from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -69,7 +69,7 @@ export const calculateNewsDistribution = (symbolsCount: number) => {
         targetNewsCount = 6; // Don't exceed 6 total
     }
 
-    return { itemsPerSymbol, targetNewsCount };
+    return {itemsPerSymbol, targetNewsCount};
 };
 
 // Check for required article fields
