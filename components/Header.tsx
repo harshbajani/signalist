@@ -15,7 +15,7 @@ const Header = async ({user}: { user: User }) => {
                            className="h-8 w-auto cursor-pointer"/>
                 </Link>
                 <nav className="hidden sm:block">
-                    <NavItems initialStocks={initialStocks}/>
+                    <NavItems initialStocks={initialStocks} userEmail={user.email}/>
                 </nav>
                 <UserDropdown user={user} initialStocks={initialStocks}/>
             </div>
