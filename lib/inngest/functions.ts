@@ -150,7 +150,7 @@ export const sendDailyNewsSummary = inngest.createFunction(
 
 export const sendInactiveUserEmails = inngest.createFunction(
   { id: 'send-inactive-user-emails' },
-  [{ event: 'app/send.inactive.user.emails' }, { cron: '0 10 */7 *' }], // Every 7 days at 10 AM
+  [{ event: 'app/send.inactive.user.emails' }, { cron: '0 10 */7 * *' }], // Every 7 days at 10 AM
   async ({ step }) => {
     // Step 1: Get users who haven't visited in 15+ days
     const inactiveUsers = await step.run('get-inactive-users', async () => {
