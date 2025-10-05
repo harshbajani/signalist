@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import {NEWS_SUMMARY_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE} from "@/lib/nodemailer/templates";
+import {NEWS_SUMMARY_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE, INACTIVE_USER_REMINDER_EMAIL_TEMPLATE} from "@/lib/nodemailer/templates";
 
 export const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -39,6 +39,33 @@ export const sendNewsSummaryEmail = async (
         to: email,
         subject: `📈 Market News Summary Today - ${date}`,
         text: `Today's market news summary from Signalist`,
+        html: htmlTemplate,
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
+export const sendInactiveUserEmail = async ({
+    email,
+    name,
+    dashboardUrl = 'https://stock-market-dev.vercel.app/',
+    unsubscribeUrl = '#'
+}: {
+    email: string;
+    name: string;
+    dashboardUrl?: string;
+    unsubscribeUrl?: string;
+}): Promise<void> => {
+    const htmlTemplate = INACTIVE_USER_REMINDER_EMAIL_TEMPLATE
+        .replace('{{name}}', name)
+        .replace(/{{dashboardUrl}}/g, dashboardUrl)
+        .replace('{{unsubscribeUrl}}', unsubscribeUrl);
+
+    const mailOptions = {
+        from: `"Signalist" <${process.env.NODEMAILER_EMAIL}>`,
+        to: email,
+        subject: `${name}, opportunities are waiting for you`,
+        text: `Hi ${name}, we miss you at Signalist! Your market opportunities are waiting.`,
         html: htmlTemplate,
     };
 
