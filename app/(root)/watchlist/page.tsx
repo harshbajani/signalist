@@ -3,9 +3,10 @@ import WatchlistTable from '@/components/WatchlistTable';
 import WatchlistNews from '@/components/WatchlistNews';
 import SearchCommand from '@/components/SearchCommand';
 import { getWatchlistWithData } from '@/lib/actions/watchlist.actions';
-import { getNews, searchStocks } from '@/lib/actions/finnhub.actions';
+import { getNews, searchStocksWithWatchlistStatus } from '@/lib/actions/finnhub.actions';
 import { auth } from '@/lib/better-auth/auth';
-import { Button } from '@/components/ui/button';
+import AlertsList from '@/components/AlertsList';
+import AlertCreateDialog from '@/components/AlertCreateDialog';
 
 export default async function WatchlistPage() {
   const session = await auth.api.getSession({
@@ -27,7 +28,8 @@ export default async function WatchlistPage() {
       const symbols = stocks.map((stock) => stock.symbol);
       return symbols.length > 0 ? getNews(symbols) : [];
     }),
-    searchStocks(),
+    // include watchlist status so initial list shows filled stars
+    searchStocksWithWatchlistStatus('', session.user.email),
   ]);
 
   return (
@@ -53,9 +55,15 @@ export default async function WatchlistPage() {
           <div className="lg:col-span-1">
             <div className="flex items-center justify-between">
               <h1 className="text-3xl font-bold text-white">Alerts</h1>
-              <Button className="bg-yellow-400 text-black px-3 py-2 rounded-lg text-sm font-medium hover:bg-yellow-500 transition-colors cursor-pointer">
-                Create Alert
-              </Button>
+              <AlertCreateDialog
+                userEmail={session.user.email}
+                stocks={watchlistData.map((w) => ({
+                  symbol: w.symbol,
+                  company: w.company,
+                }))}
+                label="Create Alert"
+                className="bg-yellow-400 text-black px-3 py-2 rounded-lg text-sm font-medium hover:bg-yellow-500 transition-colors cursor-pointer"
+              />
             </div>
           </div>
         </div>
@@ -72,12 +80,8 @@ export default async function WatchlistPage() {
 
           {/* Alerts sidebar - takes up 1/4 of the space */}
           <div className="lg:col-span-1">
-            <div className="bg-[#1a1a1a] rounded-lg border border-[#2a2a2a] p-6 h-fit">
-              <p className="text-[#9CA3AF] text-sm leading-relaxed">
-                No alerts created yet. Set up alerts for your stocks to get
-                notified of price changes.
-              </p>
-            </div>
+            {/* Alerts list with scrollable container */}
+            <AlertsList userEmail={session.user.email} />
           </div>
         </div>
 
