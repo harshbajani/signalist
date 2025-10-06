@@ -168,7 +168,7 @@ export const sendInactiveUserEmails = inngest.createFunction(
           await sendInactiveUserEmail({
             email: user.email,
             name: user.name,
-            dashboardUrl: 'https://stock-market-dev.vercel.app/',
+            dashboardUrl: 'https://signalist-mauve.vercel.app/',
             unsubscribeUrl: '#', // You can implement proper unsubscribe URL later
           });
           return { email: user.email, success: true };
