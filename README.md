@@ -129,9 +129,3 @@ Notes:
 - lib/actions – Server actions (auth, finnhub, watchlist, alerts, user)
 - lib/inngest – Inngest client + functions (news, welcome, inactive-users, price alerts)
 - lib/nodemailer – Transport and email templates
-
-## Troubleshooting
-
-- Stars in SearchCommand not filling: ensure initialStocks include isInWatchlist (the header and Watchlist page already pass watchlist-aware lists). Filled state requires fill="currentColor" on the star SVG (already implemented).
-- Finnhub 403 on company news (e.g. some exchanges): indicates plan/endpoint restrictions. Logs are warnings and the app continues with fallbacks.
-- Cron jobs: run in environments where scheduled execution is enabled. Locally you can trigger flows by signing up (welcome email) or relying on scheduled jobs once deployed.
