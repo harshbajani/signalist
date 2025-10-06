@@ -10,11 +10,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { WATCHLIST_TABLE_HEADER } from '@/lib/constants';
 import { toast } from 'sonner';
+import AlertCreateDialog from './AlertCreateDialog';
 
 interface WatchlistTableProps {
   watchlist: StockWithData[];
@@ -51,8 +51,7 @@ export default function WatchlistTable({
   };
 
   const handleCreateAlert = (symbol: string, company: string) => {
-    // TODO: Implement alert creation functionality
-    console.log('Create alert for:', symbol, company);
+    // handled by AlertCreateDialog component via its trigger
   };
 
   if (!watchlist || watchlist.length === 0) {
@@ -70,7 +69,7 @@ export default function WatchlistTable({
   }
 
   return (
-    <div className="bg-[#1a1a1a] rounded-lg border border-[#2a2a2a] overflow-hidden">
+    <div className="bg-[#1a1a1a] rounded-lg border border-[#2a2a2a] overflow-hidden max-h-[1030px] overflow-y-auto">
       <Table>
         <TableHeader>
           <TableRow className="border-[#2a2a2a] hover:bg-transparent">
@@ -122,8 +121,8 @@ export default function WatchlistTable({
                     stock.changePercent === undefined
                       ? 'text-[#9CA3AF] bg-[#2a2a2a] px-2 py-1 rounded text-sm'
                       : stock.changePercent >= 0
-                      ? 'text-[#10B981] bg-[#10B981]/20 px-2 py-1 rounded text-sm font-medium'
-                      : 'text-[#EF4444] bg-[#EF4444]/20 px-2 py-1 rounded text-sm font-medium'
+                      ? 'text-[#10B981]  px-2 py-1 rounded text-sm font-medium'
+                      : 'text-[#EF4444]  px-2 py-1 rounded text-sm font-medium'
                   }
                 >
                   {stock.changeFormatted}
@@ -142,13 +141,20 @@ export default function WatchlistTable({
 
               {/* Alert */}
               <TableCell className="py-4">
-                <Button
-                  size="sm"
-                  onClick={() => handleCreateAlert(stock.symbol, stock.company)}
-                  className="bg-[#FF6B35] hover:bg-[#FF6B35]/80 text-white text-xs px-3 py-1.5 h-auto"
-                >
-                  Add Alert
-                </Button>
+                <div className="inline-block">
+                  {/* Dialog trigger per row */}
+                  <AlertCreateDialog
+                    userEmail={userEmail || ''}
+                    stocks={watchlist.map((w) => ({
+                      symbol: w.symbol,
+                      company: w.company,
+                    }))}
+                    defaultSymbol={stock.symbol}
+                    defaultCompany={stock.company}
+                    label="Add Alert"
+                    className="bg-[#FF6B35] hover:bg-[#FF6B35]/80 text-white text-xs px-3 py-1.5 h-auto"
+                  />
+                </div>
               </TableCell>
 
               {/* Action */}

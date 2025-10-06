@@ -178,9 +178,10 @@ export default function SearchCommand({
                       <Star 
                         className={`h-4 w-4 transition-colors ${
                           stock.isInWatchlist 
-                            ? 'fill-yellow-400 text-yellow-400' 
+                            ? 'text-yellow-400' 
                             : 'text-gray-400 hover:text-yellow-400'
                         }`} 
+                        fill={stock.isInWatchlist ? 'currentColor' : 'none'}
                       />
                     </button>
                   </Link>

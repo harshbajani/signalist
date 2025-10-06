@@ -71,3 +71,57 @@ export const sendInactiveUserEmail = async ({
 
     await transporter.sendMail(mailOptions);
 };
+
+export const sendStockAlertUpperEmail = async ({
+    email,
+    symbol,
+    company,
+    currentPrice,
+    targetPrice,
+    timestamp
+}: { email: string; symbol: string; company: string; currentPrice: string; targetPrice: string; timestamp: string; }) => {
+    const { STOCK_ALERT_UPPER_EMAIL_TEMPLATE } = await import("@/lib/nodemailer/templates");
+    const htmlTemplate = STOCK_ALERT_UPPER_EMAIL_TEMPLATE
+        .replace(/{{symbol}}/g, symbol)
+        .replace(/{{company}}/g, company)
+        .replace(/{{currentPrice}}/g, currentPrice)
+        .replace(/{{targetPrice}}/g, targetPrice)
+        .replace(/{{timestamp}}/g, timestamp);
+
+    const mailOptions = {
+        from: `"Signalist" <${process.env.NODEMAILER_EMAIL}>`,
+        to: email,
+        subject: `📈 Price Above: ${symbol} hit ${targetPrice}`,
+        text: `${symbol} is above ${targetPrice}. Current: ${currentPrice}`,
+        html: htmlTemplate,
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
+export const sendStockAlertLowerEmail = async ({
+    email,
+    symbol,
+    company,
+    currentPrice,
+    targetPrice,
+    timestamp
+}: { email: string; symbol: string; company: string; currentPrice: string; targetPrice: string; timestamp: string; }) => {
+    const { STOCK_ALERT_LOWER_EMAIL_TEMPLATE } = await import("@/lib/nodemailer/templates");
+    const htmlTemplate = STOCK_ALERT_LOWER_EMAIL_TEMPLATE
+        .replace(/{{symbol}}/g, symbol)
+        .replace(/{{company}}/g, company)
+        .replace(/{{currentPrice}}/g, currentPrice)
+        .replace(/{{targetPrice}}/g, targetPrice)
+        .replace(/{{timestamp}}/g, timestamp);
+
+    const mailOptions = {
+        from: `"Signalist" <${process.env.NODEMAILER_EMAIL}>`,
+        to: email,
+        subject: `📉 Price Below: ${symbol} hit ${targetPrice}`,
+        text: `${symbol} is below ${targetPrice}. Current: ${currentPrice}`,
+        html: htmlTemplate,
+    };
+
+    await transporter.sendMail(mailOptions);
+};

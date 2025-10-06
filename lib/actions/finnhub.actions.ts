@@ -56,7 +56,7 @@ export async function getNews(
             const articles = await fetchJSON<RawNewsArticle[]>(url, 300);
             perSymbolArticles[sym] = (articles || []).filter(validateArticle);
           } catch (e) {
-            console.error('Error fetching company news for', sym, e);
+            console.warn('Company news not accessible for', sym, e instanceof Error ? e.message : e);
             perSymbolArticles[sym] = [];
           }
         })
@@ -105,7 +105,7 @@ export async function getNews(
       .map((a, idx) => formatArticle(a, false, undefined, idx));
     return formatted;
   } catch (err) {
-    console.error('getNews error:', err);
+    console.warn('getNews warning:', err instanceof Error ? err.message : err);
     throw new Error('Failed to fetch news');
   }
 }
@@ -116,9 +116,9 @@ export const searchStocks = cache(
       const token = process.env.FINNHUB_API_KEY ?? NEXT_PUBLIC_FINNHUB_API_KEY;
       if (!token) {
         // If no token, log and return empty to avoid throwing per requirements
-        console.error(
-          'Error in stock search:',
-          new Error('FINNHUB API key is not configured')
+        console.warn(
+          'Stock search unavailable:',
+          'FINNHUB API key is not configured'
         );
         return [];
       }
@@ -198,7 +198,7 @@ export const searchStocks = cache(
 
       return mapped;
     } catch (err) {
-      console.error('Error in stock search:', err);
+      console.warn('Stock search error:', err instanceof Error ? err.message : err);
       return [];
     }
   }
@@ -226,7 +226,7 @@ export const searchStocksWithWatchlistStatus = async (
       isInWatchlist: watchlistStatus[stock.symbol] || false,
     }));
   } catch (error) {
-    console.error('Error in searchStocksWithWatchlistStatus:', error);
+    console.warn('searchStocksWithWatchlistStatus warning:', (error as any)?.message ?? error);
     return [];
   }
 };
