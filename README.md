@@ -105,20 +105,6 @@ npm run start
 npx tsc --noEmit
 ```
 
-- Enviroment Variables
-
-```bash
-NODE_ENV=development-and-production
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
-MONGODB_URI=your-mongodb-uri
-BETTER_AUTH_SECRET=your-betterauth-secret
-BETTER_AUTH_URL=http://localhost:3000
-GEMINI_API_KEY=your-gemini-api-key
-NODEMAILER_EMAIL=your-nodemailer-email
-NODEMAILER_PASSWORD=your-nodemailer-password
-NEXT_PUBLIC_FINNHUB_API_KEY=your-finnhub-api-key
-```
-
 ## How alerts work
 
 - Create an alert in Watchlist (dialog). Choose Price > or Price < and a frequency.
